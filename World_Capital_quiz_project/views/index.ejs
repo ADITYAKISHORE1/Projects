@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess the capital</title>
+    <link rel="stylesheet" href="/style/style.css">
+</head>
+
+<body id="app">
+    
+    <div class="container">
+        <div class="result-container">
+            <span class="total-score">Total Score:
+                <span id="score">
+                    <%=locals.score ? score : "0" %>
+                </span>
+            </span>
+            <span class="best-score">Best Score:
+                <%=locals.bscore ? bscore : "0"%>
+            </span>
+        </div>
+        <div class="input-container">
+            <h1 id="country">
+                <%= locals.country %>
+            </h1>
+            <h3>Guess the capital</h3>
+        </div>
+        <form class="answer-container" action="/submit" method="POST">
+            <div class="answer-container">
+                <input type="text" name="ans" class="ans" placeholder="Enter the Capital">
+            </div>            
+            <button type="submit">SUBMIT
+                <%if(locals.wasCorrect===true){%>
+                    <spam class="checkmark">✔</spam>
+                    <% }else if(locals.wasCorrect===false){%>
+                        <spam class="cross">✖</spam>
+                        <% } %>
+            </button>
+    </form>
+    </div>
+    <script>
+        let wasCorrect = "<%= wasCorrect %>";
+        console.log(wasCorrect,score);
+        if (wasCorrect === "false") {
+            alert("Game Over!!\nYour final score is : <%= score%>");
+            location.href="/";
+        }
+    </script>
+
+</body>
+
+</html>
