@@ -22,5 +22,5 @@ const handleGetAnalytics =async (req,res)=>{
         totalClicks: result.visitHistory.length,
         analytics: result.visitHistory,
     });
-}
+};
 export { handleGenerateNewShortURL , handleGetAnalytics};
