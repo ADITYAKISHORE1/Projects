@@ -1,7 +1,8 @@
 import express from "express";
-import { handleGenerateNewShortURL , handleGetAnalytics} from '../controllers/url.js'
+import { handleRedirect,handleGenerateNewShortURL , handleGetAnalytics} from '../controllers/url.js'
 const router = express.Router();
 
+router.get('/:shortId',handleRedirect);
 router.post('/', handleGenerateNewShortURL);
 router.get('/analytics/:shortId', handleGetAnalytics);
 

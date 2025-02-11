@@ -1,6 +1,20 @@
 import { nanoid } from "nanoid";
 import URL from '../models/url.js';
 
+const handleRedirect = async (req, res) => {
+    const shortId = req.params.shortId;
+    const result = await URL.findOne({
+        shortID: shortId,
+    });
+    const click = result.totalClicks + 1;
+    console.log(click);
+    await URL.findOneAndUpdate({ shortID: shortId, }, {
+        $push: {
+            visitHistory: { timestamp: Date.now() },
+        }
+    });
+    res.redirect(result.redirectURL);
+}
 const handleGenerateNewShortURL = async (req, res) => {
     const body = req.body;
     if (!body.url) return res.status(400).json({ error: 'URL is required' });
@@ -8,14 +22,15 @@ const handleGenerateNewShortURL = async (req, res) => {
     await URL.create({
         shortID: shortID,
         redirectURL: body.url,
-        visitHistory: []
+        visitHistory: [],
+        createdBy: req.user._id,
     });
-    return res.json({ id: shortID });
+    return res.render("home.ejs", { id: shortID });
 };
-const handleGetAnalytics =async (req,res)=>{
+const handleGetAnalytics = async (req, res) => {
     const shortId = req.params.shortId;
     const result = await URL.findOne({
-        shortID:shortId,
+        shortID: shortId,
     });
     res.json({
         webURL: result.redirectURL,
@@ -23,4 +38,4 @@ const handleGetAnalytics =async (req,res)=>{
         analytics: result.visitHistory,
     });
 };
-export { handleGenerateNewShortURL , handleGetAnalytics};
+export { handleRedirect, handleGenerateNewShortURL, handleGetAnalytics };
